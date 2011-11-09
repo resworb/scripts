@@ -58,3 +58,15 @@ create-icecc-env.sh
 This script creates a tarball of your current toolchain environment for use with
 icecc. The script outputs the information that you'll have to copy to your
 `~/.bashrc` file in either your host environment or scratchbox environment.
+
+For host builds, remember to install the `icecc` package. On Ubuntu machines,
+you can simply type:
+
+    $ sudo apt-get install icecc icemon
+
+One server on the network will have to deal with the scheduling tasks. Edit the
+configuration file `/etc/default/icecc` and ensure that the
+`START_ICECC_SCHEDULER`-variable is set to `true`.
+
+Remember to restart the icecc init-service after modifying the configuration
+file.
