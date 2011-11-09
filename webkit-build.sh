@@ -5,6 +5,12 @@ d=`dirname $0`
 
 set -e
 
+x11r6_defined=$(echo $PATH | grep "X11R6" || true)
+
+if [ -n "$x11r6_defined" ]; then
+    die "The path to /usr/X11R6/bin needs to be removed from your PATH"
+fi
+
 cd $shared_dir
 
 qt5_defined=$(echo $PATH | grep "qtbase" || true)
