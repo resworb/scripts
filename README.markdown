@@ -62,7 +62,7 @@ icecc. The script outputs the information that you'll have to copy to your
 For host builds, remember to install the `icecc` package. On Ubuntu machines,
 you can simply type:
 
-    $ sudo apt-get install icecc icemon
+    $ sudo apt-get install icecc icecc-monitor
 
 One server on the network will have to deal with the scheduling tasks. Edit the
 configuration file `/etc/default/icecc` and ensure that the
