@@ -14,7 +14,7 @@ if [ -e ${qt5_dir} ]; then
 else
     git clone git://gitorious.org/qt/qt5.git qt5
     cd qt5
-    git checkout 6df6e99be09731991a1689cf1a71c601f4814865
+    git checkout 5981f1728697d2afae25a17f2094769c69142787
     ./init-repository --module-subset=qtbase,qtxmlpatterns,qtscript,qtdeclarative
 fi
 
