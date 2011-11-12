@@ -1,9 +1,11 @@
 #!/bin/sh
 
+set -e
+
 d=`dirname $0`
 . $d/common.sh
 
-set -e
+qt5hash=$(cat $d/qt5-pinned-hash)
 
 echo "Get the sources..."
 
@@ -14,7 +16,7 @@ if [ -e ${qt5_dir} ]; then
 else
     git clone git://gitorious.org/qt/qt5.git qt5
     cd qt5
-    git checkout 5981f1728697d2afae25a17f2094769c69142787
+    git checkout $qt5hash
     ./init-repository --module-subset=qtbase,qtxmlpatterns,qtscript,qtdeclarative
 fi
 
