@@ -64,12 +64,12 @@ libxcb-xfixes0-dev
 
 deps_install_m_i386="libgl-dev libgl1"
 
-if [ $device_target == "host" ]; then
+if [ $device_target = "host" ]; then
     #target contains deps for: qt, webkit, grob-m5, grob-m6
        deps_install=$deps_install_host
        deps_purge=$deps_purge_host
 else
-   if [ $meego_target == "m6" ]; then
+   if [ $meego_target = "m6" ]; then
     #target contains deps for: webkit, grob-m6
        deps_install=$deps_install_m
        deps_purge=$deps_purge_m
@@ -78,7 +78,7 @@ else
        deps_install=$deps_install_m
        deps_purge=$deps_purge_m
    fi
-   if [ $device_target == "armel" ]; then
+   if [ $device_target = "armel" ]; then
        deps="$deps $deps_install_m_armel"
    else
        deps="$deps $deps_install_m_i386"

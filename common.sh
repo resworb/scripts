@@ -42,7 +42,7 @@ fi
 # export DEB_BUILD_OPTIONS=parallel=30 if you want 30 jobs
 parallel_jobs=$(echo $DEB_BUILD_OPTIONS | sed -e 's/.*parallel=\([0-9]\+\).*/\1/')
 if [ -n "$parallel_jobs" ]; then
-    if [ "$parallel_jobs" == "$DEB_BUILD_OPTIONS" ]; then
+    if [ "$parallel_jobs" = "$DEB_BUILD_OPTIONS" ]; then
 	parallel_jobs=""
     fi
 fi

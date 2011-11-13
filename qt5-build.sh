@@ -11,7 +11,7 @@ if [ -n "$x11r6_defined" ]; then
     die "The path to /usr/X11R6/bin needs to be removed from your PATH"
 fi
 
-if [ $device_target == "armel" ]; then
+if [ $device_target = "armel" ]; then
     extra_configure_flags="-platform unsupported/linux-host-g++ -xplatform linux-g++-maemo -force-pkg-config"
 fi
 
