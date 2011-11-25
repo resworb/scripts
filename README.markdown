@@ -35,7 +35,7 @@ You should now have a working dir (~/swork), residing in/accessible from Scratch
 (outside Scratchbox)
 
     $ cd ~/swork
-    $ git clone git@github.com:larsgk/browser-scripts.git
+    $ git clone git@github.com:resworb/scripts.git
     $ browser-scripts/builddeps-install.sh
     $ browser-scripts/clone-sources.sh
     $ browser-scripts/build-sources.sh
