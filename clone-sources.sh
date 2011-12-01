@@ -14,7 +14,7 @@ cd $shared_dir
 if [ -e ${qt5_dir} ]; then
     echo "$qt5_dir already exists, you should probably run update-sources.sh"
 else
-    git clone git://gitorious.org/qt/qt5.git qt5
+    git clone git@gitorious.org:qt/qt5.git qt5
     cd qt5
     git checkout $qt5hash
     ./init-repository --module-subset=qtbase,qtxmlpatterns,qtscript,qtdeclarative
