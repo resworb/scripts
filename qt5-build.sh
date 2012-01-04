@@ -25,7 +25,7 @@ fi
 
 echo "Building Qt5..."
 
-./configure -fast -nomake demos -nomake examples -nomake tests -nokia-developer $extra_configure_flags
+./configure -fast -nomake demos -nomake examples -nomake tests -developer-build -opensource -confirm-license $extra_configure_flags
 make $makeargs
 
 cd $shared_dir
