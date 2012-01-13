@@ -12,7 +12,7 @@ if [ -n "$x11r6_defined" ]; then
 fi
 
 if [ $device_target = "armel" ]; then
-    extra_configure_flags="-platform unsupported/linux-host-g++ -xplatform linux-g++-maemo -force-pkg-config"
+    extra_configure_flags="-platform linux-g++-maemo -force-pkg-config"
 fi
 
 cd $qt5_dir
