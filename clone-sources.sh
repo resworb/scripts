@@ -17,7 +17,7 @@ else
     git clone git@gitorious.org:qt/qt5.git qt5
     cd qt5
     git checkout $qt5hash
-    ./init-repository --ssh --module-subset=qtbase,qtxmlpatterns,qtjsbackend,qtscript,qtdeclarative,qtsensors,qtlocation,qtquick3d
+    ./init-repository --ssh --module-subset=qtbase,qtxmlpatterns,qtjsbackend,qtscript,qtdeclarative,qtsensors,qtlocation,qt3d
 fi
 
 cd $shared_dir
