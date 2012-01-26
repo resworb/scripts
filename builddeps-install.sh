@@ -25,6 +25,8 @@ libxcb-icccm4-dev \
 libxcb-sync0 \
 libxcb-sync0-dev \
 libxcb-xfixes0-dev \
+libxcb-damage0 \
+libxcb-damage0-dev
 "
 
 deps_install_m=$deps_install_host;
@@ -59,7 +61,9 @@ libxcb-icccm1 \
 libxcb-icccm1-dev \
 libxcb-sync0 \
 libxcb-sync0-dev \
-libxcb-xfixes0-dev
+libxcb-xfixes0-dev \
+libxcb-damage0 \
+libxcb-damage0-dev
 "
 
 deps_install_m_i386="libgl-dev libgl1"
