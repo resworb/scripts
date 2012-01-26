@@ -12,6 +12,8 @@ d=`dirname $0`
 
 export PATH=$qt5_dir/qtbase/bin:$PATH
 
+. $script_dir/qt-components-build.sh
+
 . $script_dir/webkit-build.sh
 
 echo "Done"
