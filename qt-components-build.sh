@@ -11,10 +11,6 @@ if [ -n "$x11r6_defined" ]; then
     die "The path to /usr/X11R6/bin needs to be removed from your PATH"
 fi
 
-if [ $device_target = "armel" ]; then
-    extra_configure_flags="-meego"
-fi
-
 cd $qtcomponents_dir
 
 if [ -n "${clean}" ]; then
@@ -24,7 +20,7 @@ fi
 
 echo "Building Qt-Components..."
 
-./configure $extra_configure_flags
+./configure -meego
 make $makeargs
 make install
 
