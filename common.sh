@@ -23,6 +23,7 @@ script_dir=`dirname $script_file`
 
 shared_dir=$script_dir/..
 qt5_dir=$shared_dir/qt5
+qtcomponents_dir=$shared_dir/qt-components
 webkit_dir=$shared_dir/webkit
 
 #default to host m6 build

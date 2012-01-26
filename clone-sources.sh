@@ -6,6 +6,7 @@ d=`dirname $0`
 . $d/common.sh
 
 qt5hash=$(cat $d/qt5-pinned-hash)
+qtcomponentshash=$(cat $d/qt-components-pinned-hash)
 
 echo "Get the sources..."
 
@@ -18,6 +19,16 @@ else
     cd qt5
     git checkout $qt5hash
     ./init-repository --ssh --module-subset=qtbase,qtxmlpatterns,qtjsbackend,qtscript,qtdeclarative,qtsensors,qtlocation,qt3d
+fi
+
+cd $shared_dir
+
+if [ -e ${qtcomponents_dir} ]; then
+    echo "$qtcomponents_dir already exists, you should probably run update-sources.sh"
+else
+    git clone -b qtquick2 git@gitorious.org:qt-components/qt-components.git qt-components
+    cd qt-components
+    git checkout $qtcomponentshash
 fi
 
 cd $shared_dir
