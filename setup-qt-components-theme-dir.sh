@@ -2,6 +2,13 @@
 
 set -e
 
+sdkPath=$1
+if [ -n "$sdkPath" ]; then
+    shift
+else
+    sdkPath=$HOME/QtSDK
+fi
+
 d=`dirname $0`
 . $d/common.sh
 
@@ -18,27 +25,23 @@ if [ -e "$prf_file" ]; then
     exit 0
 fi
 
-qtVersionFile=$HOME/.config/Nokia/qtversion.xml
-if [ ! -e "$qtVersionFile" ]; then
-    echo "Cannot locate Qt version file at $qtVersionFile - Did you forget to install the Qt SDK?"
+if [ ! -d $sdkPath ]; then
+    echo "Cannot locate Qt SDK. Tried looking in \"$sdkPath\". Please provide the path to your SDK"
+    echo "as argument to this script."
     exit 1
 fi
 
-set +e
-qmakePath=`cat $qtVersionFile | sed -n -e "s,.\+key=\"QMakePath\">\(.\+QtSDK/Simulator/Qt/gcc/bin/qmake\)</value>$,\\1,p"`
-if [ $? != 0 -o -z "$qmakePath" ]; then
-    echo "Cannot find Harmattan target in Qt SDK. Did you forget to install it?"
-    exit 1
-fi
-set -e
-themePath=`$qmakePath -query QT_INSTALL_DATA`/harmattanthemes
+themePath=$sdkPath/Simulator/Qt/gcc/harmattanthemes
 
 if [ -d $themePath -a -d $themePath/blanco ]; then
     echo "Found theme dir in $themePath"
 else
-    echo "Could not locate theme path. Was looking in $themePath"
+    echo "Cannot locate Harmattan theme in your Qt SDK installation. Did you forget to install"
+    echo "the Qt Quick Components for Harmattan for the Qt Simulator?"
+    echo
+    echo "I tried looking in $themePath"
     exit 1
 fi
 
-themePath=`cd $themePath && pwd`
 echo M_THEME_DIR=$themePath > $prf_file
+echo "Registered theme dir in $prf_file."
