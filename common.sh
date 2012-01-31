@@ -18,6 +18,49 @@ is_sbox() {
     return 0
 }
 
+sanity_check_symlinks() {
+    for link in `find $1 -maxdepth 1 -type l`; do
+        target=`readlink $target`
+        if [[ $target == /* ]]; then
+            die "Found absolute symlink in $1. That won't work with --sysroot. Call resolve-scratchbox-absolute-symlinks.sh to fix this."
+        fi
+    done
+}
+
+sanity_check_cross_compiler_symlinks() {
+    set +e
+    which arm-linux-gnueabi-g++ > /dev/null
+    if [ $? != 0 ]; then
+        die "Need arm-linux-gnueabi-g++ in PATH."
+    fi
+    set -e
+}
+
+setup_sbox_cross_compilation() {
+    if is_sbox; then
+        die "Cannot cross-compile with scratchbox from within scratchbox."
+    fi
+    device_target=xarmel
+
+    sbox_dir=/scratchbox/users/$USER/
+    if [ ! -d $sbox_dir ]; then
+        die "Cannot locate scratchbox dir. Was looking for $sbox_dir"
+    fi
+    config=$sbox_dir/targets/links/scratchbox.config
+    if [ ! -h $config ]; then
+        die "Cannot find scratchbox config symlink. Was looking for $config"
+    fi
+    config=$sbox_dir/`readlink $config`
+    target_dir=`source $config && echo $SBOX_TARGET_DIR`
+    target_dir=$sbox_dir$target_dir
+    export SYSROOT_DIR=$target_dir
+    export PKG_CONFIG_DIR=
+    export PKG_CONFIG_LIBDIR=$target_dir/usr/lib/pkg-config
+    export PKG_CONFIG_SYSROOT_DIR=$target_dir
+    sanity_check_symlinks
+    sanity_check_cross_compiler_symlinks
+}
+
 script_file=`readlink -f $0`
 script_dir=`dirname $script_file`
 
@@ -81,6 +124,10 @@ while [ $# -gt 0 ]; do
             ;;
         --m6)
             meego_target="m6"
+            shift
+            ;;
+        --scratchbox-cross-compile)
+            setup_sbox_cross_compilation
             shift
             ;;
 

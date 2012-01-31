@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
@@ -13,6 +13,11 @@ fi
 
 if [ $device_target = "armel" ]; then
     extra_configure_flags="-platform linux-g++-maemo -force-pkg-config"
+elif [ $device_target = "xarmel" ]; then
+    if [ -z "$SYSROOT_DIR" ]; then
+        die "Need sysroot dir to be set to build Qt with cross-arm target"
+    fi
+    extra_configure_flags="-xplatform linux-arm-gnueabi-g++ -force-pkg-config -little-endian -arch arm -no-pch -sysroot $SYSROOT_DIR"
 fi
 
 cd $qt5_dir
