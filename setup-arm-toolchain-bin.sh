@@ -38,4 +38,4 @@ for file in `cd $toolChainPath; ls arm-none-linux-gnueabi-*`; do
     ln -s $toolChainPath/$file $symlinkPath/`echo $file | sed -e "s,none-,,"`
 done
 
-echo "Okay, now is a good time to put $symlinkPath into your PATH."
+echo "Cross-compiler symlinks set up in $toolChainPath."

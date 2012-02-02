@@ -18,61 +18,6 @@ is_sbox() {
     return 0
 }
 
-sanity_check_symlinks() {
-    local usrlib=$SYSROOT_DIR/usr/lib
-    for link in `find $usrlib -maxdepth 1 -type l`; do
-        target=`readlink $link`
-        if [[ $target == /* ]]; then
-            die "Found absolute symlink in $usrlib. That won't work with --sysroot. Call resolve-absolute-links-in-scratchbox-sysroot.sh to fix this."
-        fi
-    done
-}
-
-sanity_check_cross_compiler_symlinks() {
-    set +e
-    which arm-linux-gnueabi-g++ > /dev/null
-    if [ $? != 0 ]; then
-        die "Need arm-linux-gnueabi-g++ in PATH."
-    fi
-    set -e
-}
-
-setup_sysroot_from_scratchbox() {
-    if is_sbox; then
-        die "Cannot do sysroot builds from within Scratchbox."
-    fi
-    local sbox_dir=/scratchbox/users/$USER/
-    if [ ! -d $sbox_dir ]; then
-        die "Cannot locate scratchbox dir. Was looking for $sbox_dir"
-    fi
-    local config=$sbox_dir/targets/links/scratchbox.config
-    if [ ! -h $config ]; then
-        die "Cannot find scratchbox config symlink. Was looking for $config"
-    fi
-    config=$sbox_dir/`readlink $config`
-    local target_dir=`source $config && echo $SBOX_TARGET_DIR`
-    target_dir=$sbox_dir$target_dir
-    export SYSROOT_DIR=$target_dir
-}
-
-setup_sbox_cross_compilation() {
-    device_target=xarmel
-    setup_sysroot_from_scratchbox
-
-    export PKG_CONFIG_DIR=
-    export PKG_CONFIG_LIBDIR=$SYSROOT_DIR/usr/lib/pkg-config
-    export PKG_CONFIG_SYSROOT_DIR=$SYSROOT_DIR
-
-    local toolchainDir=$script_dir/arm-toolchain-bin
-    if [ ! -d $toolchainDir ]; then
-        die "Could not locale toolchain in $toolchainDir. Run setup-arm-toolchain-bin.sh once to set up the toolchain symlinks."
-    fi
-    export PATH=$toolchainDir:$PATH
-
-    sanity_check_symlinks
-    sanity_check_cross_compiler_symlinks
-}
-
 script_file=`readlink -f $0`
 script_dir=`dirname $script_file`
 
@@ -139,7 +84,10 @@ while [ $# -gt 0 ]; do
             shift
             ;;
         --scratchbox-cross-compile)
-            setup_sbox_cross_compilation
+            . $script_dir/cross-compile-config.sh
+            if [ $? != 0 ]; then
+                exit $?
+            fi
             shift
             ;;
 
