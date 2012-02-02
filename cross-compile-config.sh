@@ -45,7 +45,7 @@ export PKG_CONFIG_LIBDIR=$SYSROOT_DIR/usr/lib/pkg-config
 export PKG_CONFIG_SYSROOT_DIR=$SYSROOT_DIR
 
 setup_toolchain() {
-    local script_file=`readlink -f $0`
+    local script_file=`readlink -f $1`
     local script_dir=`dirname $script_file`
     local toolchainDir=$script_dir/arm-toolchain-bin
     if [ ! -d $toolchainDir ]; then
@@ -56,7 +56,7 @@ setup_toolchain() {
     return 0
 }
 
-if ! setup_toolchain; then
+if ! setup_toolchain $0; then
     return 1
 fi
 
