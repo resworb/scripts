@@ -19,10 +19,11 @@ is_sbox() {
 }
 
 sanity_check_symlinks() {
-    for link in `find $1 -maxdepth 1 -type l`; do
-        target=`readlink $target`
+    local usrlib=$SYSROOT_DIR/usr/lib
+    for link in `find $usrlib -maxdepth 1 -type l`; do
+        target=`readlink $link`
         if [[ $target == /* ]]; then
-            die "Found absolute symlink in $1. That won't work with --sysroot. Call resolve-scratchbox-absolute-symlinks.sh to fix this."
+            die "Found absolute symlink in $usrlib. That won't work with --sysroot. Call resolve-scratchbox-absolute-symlinks.sh to fix this."
         fi
     done
 }
@@ -36,27 +37,31 @@ sanity_check_cross_compiler_symlinks() {
     set -e
 }
 
-setup_sbox_cross_compilation() {
+setup_sysroot_from_scratchbox() {
     if is_sbox; then
-        die "Cannot cross-compile with scratchbox from within scratchbox."
+        die "Cannot do sysroot builds from within Scratchbox."
     fi
-    device_target=xarmel
-
-    sbox_dir=/scratchbox/users/$USER/
+    local sbox_dir=/scratchbox/users/$USER/
     if [ ! -d $sbox_dir ]; then
         die "Cannot locate scratchbox dir. Was looking for $sbox_dir"
     fi
-    config=$sbox_dir/targets/links/scratchbox.config
+    local config=$sbox_dir/targets/links/scratchbox.config
     if [ ! -h $config ]; then
         die "Cannot find scratchbox config symlink. Was looking for $config"
     fi
     config=$sbox_dir/`readlink $config`
-    target_dir=`source $config && echo $SBOX_TARGET_DIR`
+    local target_dir=`source $config && echo $SBOX_TARGET_DIR`
     target_dir=$sbox_dir$target_dir
     export SYSROOT_DIR=$target_dir
+}
+
+setup_sbox_cross_compilation() {
+    device_target=xarmel
+    setup_sysroot_from_scratchbox
+
     export PKG_CONFIG_DIR=
-    export PKG_CONFIG_LIBDIR=$target_dir/usr/lib/pkg-config
-    export PKG_CONFIG_SYSROOT_DIR=$target_dir
+    export PKG_CONFIG_LIBDIR=$SYSROOT_DIR/usr/lib/pkg-config
+    export PKG_CONFIG_SYSROOT_DIR=$SYSROOT_DIR
     sanity_check_symlinks
     sanity_check_cross_compiler_symlinks
 }

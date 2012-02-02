@@ -1,23 +1,22 @@
 #!/bin/bash
 
-sysroot=$1
-if [ -z "$sysroot" ]; then
-    echo "usage: $0 /path/to/sysroot"
-    exit 1
-fi
+d=`dirname $0`
+. $d/common.sh
 
-usrlib=$sysroot/usr/lib
+setup_sysroot_from_scratchbox
+
+usrlib=$SYSROOT_DIR/usr/lib
 
 if [ ! -d $usrlib ]; then
-    echo "Cannot find /usr/lib in sysroot $sysroot. Did you specify the correct sysroot path?"
+    echo "Cannot find /usr/lib in sysroot $SYSROOT_DIR. Did you specify the correct sysroot path?"
     exit 1
 fi
 
-echo "Looking for absolute symlinks..."
+echo "Looking for absolute symlinks in $usrlib..."
 for link in `find $usrlib -maxdepth 1 -type l`; do
     target=`readlink $link`
     if [[ $target == /* ]]; then
-        target=${sysroot}${target}
+        target=${SYSROOT_DIR}${target}
         common=$usrlib
         back=
         while [ "${target#$common}" = "${target}" ]; do
