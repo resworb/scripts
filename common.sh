@@ -23,7 +23,7 @@ sanity_check_symlinks() {
     for link in `find $usrlib -maxdepth 1 -type l`; do
         target=`readlink $link`
         if [[ $target == /* ]]; then
-            die "Found absolute symlink in $usrlib. That won't work with --sysroot. Call resolve-scratchbox-absolute-symlinks.sh to fix this."
+            die "Found absolute symlink in $usrlib. That won't work with --sysroot. Call resolve-absolute-links-in-scratchbox-sysroot.sh to fix this."
         fi
     done
 }
