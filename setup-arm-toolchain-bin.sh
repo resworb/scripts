@@ -17,7 +17,8 @@ if is_sbox; then
     exit 0
 fi
 
-toolChainPath=$sdkPath/Madde/toolchains/arm-2009q3-67-arm-none-linux-gnueabi-i686-pc-linux-gnu/arm-2009q3-67/bin
+arch=`uname -m | sed -e "s,i.*,i686-pc," -e "s,x86_64,x86_64-unknown,"`
+toolChainPath=$sdkPath/Madde/toolchains/arm-2009q3-67-arm-none-linux-gnueabi-$arch-linux-gnu/arm-2009q3-67/bin
 
 if [ ! -d "$toolChainPath" ]; then
     echo "Cannot locate Qt SDK. Tried looking in \"$sdkPath\". Please provide the path to your SDK"
