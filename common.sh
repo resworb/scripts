@@ -62,6 +62,13 @@ setup_sbox_cross_compilation() {
     export PKG_CONFIG_DIR=
     export PKG_CONFIG_LIBDIR=$SYSROOT_DIR/usr/lib/pkg-config
     export PKG_CONFIG_SYSROOT_DIR=$SYSROOT_DIR
+
+    local toolchainDir=$script_dir/arm-toolchain-bin
+    if [ ! -d $toolchainDir ]; then
+        die "Could not locale toolchain in $toolchainDir. Run setup-arm-toolchain-bin.sh once to set up the toolchain symlinks."
+    fi
+    export PATH=$toolchainDir:$PATH
+
     sanity_check_symlinks
     sanity_check_cross_compiler_symlinks
 }
