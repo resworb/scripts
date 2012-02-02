@@ -88,6 +88,7 @@ while [ $# -gt 0 ]; do
             if [ $? != 0 ]; then
                 exit $?
             fi
+            device_target=xarmel
             shift
             ;;
 
