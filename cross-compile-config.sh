@@ -41,7 +41,7 @@ if ! setup_sysroot_from_scratchbox; then
 fi
 
 export PKG_CONFIG_DIR=
-export PKG_CONFIG_LIBDIR=$SYSROOT_DIR/usr/lib/pkg-config
+export PKG_CONFIG_LIBDIR=$SYSROOT_DIR/usr/lib/pkgconfig
 export PKG_CONFIG_SYSROOT_DIR=$SYSROOT_DIR
 
 setup_toolchain() {
