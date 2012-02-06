@@ -3,6 +3,7 @@
 d=`dirname $0`
 . $d/common.sh
 
+. $script_dir/cross-compile-config.sh --parse-only
 setup_sysroot_from_scratchbox
 
 usrlib=$SYSROOT_DIR/usr/lib

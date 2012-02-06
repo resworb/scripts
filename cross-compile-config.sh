@@ -40,14 +40,6 @@ setup_sysroot_from_scratchbox() {
     return 0
 }
 
-if ! setup_sysroot_from_scratchbox; then
-    return 1
-fi
-
-export PKG_CONFIG_DIR=
-export PKG_CONFIG_LIBDIR=$SYSROOT_DIR/usr/lib/pkgconfig
-export PKG_CONFIG_SYSROOT_DIR=$SYSROOT_DIR
-
 setup_toolchain() {
     local script_file=`readlink -f $1`
     local script_dir=`dirname $script_file`
@@ -60,12 +52,24 @@ setup_toolchain() {
     return 0
 }
 
-if ! setup_toolchain $0; then
-    return 1
-fi
+if [ "$1" != "--parse-only" ]; then
 
-if ! sanity_check_symlinks; then
-    return 1
+    if ! setup_sysroot_from_scratchbox; then
+        return 1
+    fi
+
+    export PKG_CONFIG_DIR=
+    export PKG_CONFIG_LIBDIR=$SYSROOT_DIR/usr/lib/pkgconfig
+    export PKG_CONFIG_SYSROOT_DIR=$SYSROOT_DIR
+
+
+    if ! setup_toolchain $0; then
+        return 1
+    fi
+
+    if ! sanity_check_symlinks; then
+        return 1
+    fi
 fi
 
 true
