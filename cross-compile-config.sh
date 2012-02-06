@@ -19,6 +19,10 @@ setup_sysroot_from_scratchbox() {
         echo "Cannot do sysroot builds from within Scratchbox."
         return 1
     fi
+    if [ -n "$SYSROOT_DIR" ]; then
+        echo "Using specified sysroot at $SYSROOT_DIR"
+        return 0
+    fi
     local sbox_dir=/scratchbox/users/$USER/
     if [ ! -d $sbox_dir ]; then
         echo "Cannot locate scratchbox dir. Was looking for $sbox_dir"
