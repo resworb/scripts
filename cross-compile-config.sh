@@ -58,7 +58,7 @@ if [ "$1" != "--parse-only" ]; then
         return 1
     fi
 
-    export PKG_CONFIG_DIR=
+    export PKG_CONFIG_PATH=
     export PKG_CONFIG_LIBDIR=$SYSROOT_DIR/usr/lib/pkgconfig
     export PKG_CONFIG_SYSROOT_DIR=$SYSROOT_DIR
 
