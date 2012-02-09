@@ -11,6 +11,7 @@ readline5:libreadline5-dev_5.2-2maemo4+0m6_armel \
 tiff:libtiff4-dev_3.9.4-1+maemo6+0m6_armel \
 tiff:libtiffxx0c2_3.9.4-1+maemo6+0m6_armel \
 libx11:libx11-xcb-dev_1.4.3-0-meego1241+0m6_armel \
+xcb-util:libxcb-atom1_0.3.6-2+0m6_armel \
 xcb-util:libxcb-atom1-dev_0.3.6-2+0m6_armel \
 xcb-util:libxcb-aux0_0.3.6-2+0m6_armel \
 libxcb:libxcb-damage0-dev_1.7-1-meego1082+0m6_armel \
