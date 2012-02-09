@@ -83,9 +83,9 @@ else
        deps_purge=$deps_purge_m
    fi
    if [ $device_target = "armel" ]; then
-       deps="$deps $deps_install_m_armel"
+       deps_install="$deps_install $deps_install_m_armel"
    else
-       deps="$deps $deps_install_m_i386"
+       deps_install="$deps_install $deps_install_m_i386"
    fi
 fi
 
