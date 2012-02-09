@@ -9,7 +9,7 @@ echo "Installing deps..."
 
 $sudo apt-get -y --force-yes build-dep qt4-x11
 
-deps_install_host="\
+deps_install_shared="\
 libxcb1 \
 libxcb1-dev \
 libx11-xcb1 \
@@ -20,8 +20,6 @@ libxcb-image0 \
 libxcb-image0-dev \
 libxcb-shm0 \
 libxcb-shm0-dev \
-libxcb-icccm4 \
-libxcb-icccm4-dev \
 libxcb-sync0 \
 libxcb-sync0-dev \
 libxcb-xfixes0-dev \
@@ -29,7 +27,9 @@ libxcb-damage0 \
 libxcb-damage0-dev
 "
 
-deps_install_m=$deps_install_host;
+deps_install_host="$deps_install_shared libxcb-icccm4 libxcb-icccm4-dev"
+
+deps_install_m=$deps_install_shared;
 
 deps_purge_host="\
 libxcb-render-util0 \
