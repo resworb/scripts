@@ -83,7 +83,7 @@ while [ $# -gt 0 ]; do
             meego_target="m6"
             shift
             ;;
-        --scratchbox-cross-compile)
+        --cross-compile)
             . $script_dir/cross-compile-config.sh
             if [ $? != 0 ]; then
                 exit $?

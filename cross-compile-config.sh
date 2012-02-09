@@ -1,20 +1,7 @@
 
-sanity_check_symlinks() {
-    echo -n "Checking $SYSROOT_DIR for absolute symlinks ..."
-    local usrlib=$SYSROOT_DIR/usr/lib
-    for link in `find $usrlib -maxdepth 1 -type l`; do
-        target=`readlink $link`
-        if [[ $target == /* ]]; then
-            echo
-            echo "Found absolute symlink in $usrlib. That won't work with --sysroot. Call resolve-absolute-links-in-scratchbox-sysroot.sh to fix this."
-            return 1
-        fi
-    done
-    echo " Done."
-    return 0
-}
+setup_sysroot_from_sdk() {
+    local harmattan_target=harmattan_10.2011.34-1
 
-setup_sysroot_from_scratchbox() {
     if [ -n "$SBOX_UNAME_MACHINE" ]; then
         echo "Cannot do sysroot builds from within Scratchbox."
         return 1
@@ -23,20 +10,18 @@ setup_sysroot_from_scratchbox() {
         echo "Using specified sysroot at $SYSROOT_DIR"
         return 0
     fi
-    local sbox_dir=/scratchbox/users/$USER/
-    if [ ! -d $sbox_dir ]; then
-        echo "Cannot locate scratchbox dir. Was looking for $sbox_dir"
-        return 1
+    local sdkPath=$HOME/QtSDK
+    if [ ! -d $sdkPath ]; then
+        echo "Cannot locate Qt SDK. Tried looking in \"$sdkPath\"."
+        exit 1
     fi
-    local config=$sbox_dir/targets/links/scratchbox.config
-    if [ ! -h $config ]; then
-        echo "Cannot find scratchbox config symlink. Was looking for $config"
-        return 1
+    local madAdmin="$sdkPath/Madde/bin/mad-admin"
+    if [ ! -e "$madAdmin" ]; then
+        echo "Cannot locate Madde inside the Qt SDK. Did you forget to install the Harmattan packages in the Qt SDK?"
+        exit 1
     fi
-    config=$sbox_dir/`readlink $config`
-    local target_dir=`source $config && echo $SBOX_TARGET_DIR`
-    target_dir=$sbox_dir$target_dir
-    export SYSROOT_DIR=$target_dir
+    export SYSROOT_DIR=`$madAdmin -t $harmattan_target query sysroot-dir`
+    echo "Using sysroot at $SYSROOT_DIR"
     return 0
 }
 
@@ -54,7 +39,7 @@ setup_toolchain() {
 
 if [ "$1" != "--parse-only" ]; then
 
-    if ! setup_sysroot_from_scratchbox; then
+    if ! setup_sysroot_from_sdk; then
         return 1
     fi
 
@@ -64,10 +49,6 @@ if [ "$1" != "--parse-only" ]; then
 
 
     if ! setup_toolchain $0; then
-        return 1
-    fi
-
-    if ! sanity_check_symlinks; then
         return 1
     fi
 fi
