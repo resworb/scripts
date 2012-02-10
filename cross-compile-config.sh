@@ -34,6 +34,9 @@ setup_toolchain() {
         return 1
     fi
     export PATH=$toolchainDir:$PATH
+    if [ -x setup-icecc-cross-env.sh ] ; then
+        . setup-icecc-cross-env.sh
+    fi
     return 0
 }
 
