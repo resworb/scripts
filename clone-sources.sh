@@ -20,6 +20,7 @@ else
     git checkout $qt5hash
     ./init-repository --ssh --module-subset=qtbase,qtxmlpatterns,qtjsbackend,qtscript,qtdeclarative,qtsensors,qtlocation,qt3d,qtimageformats,qtquick1
     (cd qtbase && git fetch http://codereview.qt-project.org/p/qt/qtbase refs/changes/54/15954/1 && git cherry-pick FETCH_HEAD)
+    (cd qtquick1 && git fetch http://codereview.qt-project.org/p/qt/qtquick1 refs/changes/81/15981/1 && git cherry-pick FETCH_HEAD)
 fi
 
 cd $shared_dir
