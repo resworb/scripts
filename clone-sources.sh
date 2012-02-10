@@ -18,6 +18,7 @@ else
     git clone git@gitorious.org:qt/qt5.git qt5
     cd qt5
     git checkout $qt5hash
+    (cd qtbase && git fetch http://codereview.qt-project.org/p/qt/qtbase refs/changes/54/15954/1 && git cherry-pick FETCH_HEAD)
     ./init-repository --ssh --module-subset=qtbase,qtxmlpatterns,qtjsbackend,qtscript,qtdeclarative,qtsensors,qtlocation,qt3d,qtimageformats,qtquick1
 fi
 
