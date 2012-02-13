@@ -125,9 +125,11 @@ cat $script_root/packages | while read package_spec; do
 
     package_base=$(echo $package_spec | cut -d : -f 1)
     package_filename="$(echo $package_spec | cut -d : -f 2).deb"
-
-    # FIXME: Find a way to prevent re-downloading and installing
-    # packages we already have installed previosuly.
+    package_name=$(echo $package_filename | cut -d _ -f 1)
+    $mad_target_admin xdpkg -p $package_name 2>/dev/null >/dev/null
+    if [ $? == 0 ]; then
+        continue
+    fi
 
     case $package_base in
         lib*)
