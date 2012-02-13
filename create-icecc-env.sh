@@ -174,7 +174,7 @@ elif [ "x$icecc_environment" = "xcross" ] ; then
 
     if [ -z $gcc_filename ] ; then
         echo "Cross compiler not found!"
-        echo "You might want to run \"./setup-arm-toolchain-bin.sh\" first."
+        echo "You might want to run \"./setup-madde-toolchain.sh\" first."
         exit 1
     fi
 

@@ -84,7 +84,7 @@ while [ $# -gt 0 ]; do
             shift
             ;;
         --cross-compile)
-            . $script_dir/cross-compile-config.sh
+            . $script_dir/setup-madde-toolchain.sh
             if [ $? != 0 ]; then
                 exit $?
             fi
