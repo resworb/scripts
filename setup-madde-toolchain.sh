@@ -67,11 +67,12 @@ else
     }
 fi
 
-mad_admin=$(command -v mad-admin)
-if [ $? != 0 ]; then
-    # Assume it's in the default QtSDK path
-    mad_admin=$HOME/QtSDK/Madde/bin/mad-admin
-    if [ ! -e $mad_admin ]; then
+# Assume it's in the default QtSDK path
+mad_admin=$HOME/QtSDK/Madde/bin/mad-admin
+if [ ! -e $mad_admin ]; then
+    # Try to look for it in the path. This might pick up a system-MADDE
+    mad_admin=$(command -v mad-admin)
+    if [ $? != 0 ]; then
         cat <<EOF
 Could not find MADDE. Please make sure the MADDE tools such as 'mad' and 'mad-admin' are in
 your PATH. If you've installed the Qt SDK you'll find these tools in \$QTSDK/Madde/bin.
@@ -84,6 +85,7 @@ mad_install_dir=$($mad_admin query install-dir)
 
 if [ ! -d "$($mad_admin -t $harmattan_base_target query target-dir 2>&1)" ]; then
     echo "Target '$harmattan_base_target' not found. Please install it first."
+    echo "If you've installed the Qt SDK this target should come with the SDK."
     test $sourced && return || exit 1
 fi
 
