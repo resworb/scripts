@@ -69,11 +69,15 @@ fi
 
 mad_admin=$(command -v mad-admin)
 if [ $? != 0 ]; then
-    cat <<EOF
+    # Assume it's in the default QtSDK path
+    mad_admin=$HOME/QtSDK/Madde/bin/mad-admin
+    if [ ! -e $mad_admin ]; then
+        cat <<EOF
 Could not find MADDE. Please make sure the MADDE tools such as 'mad' and 'mad-admin' are in
 your PATH. If you've installed the Qt SDK you'll find these tools in \$QTSDK/Madde/bin.
 EOF
-    test $sourced && return || exit 1
+        test $sourced && return || exit 1
+    fi
 fi
 
 mad_install_dir=$($mad_admin query install-dir)
