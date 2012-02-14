@@ -1,6 +1,20 @@
 Resworb Scripts
 ===============
 
+Cross-compile Instructions
+--------------------------
+
+1. Install the Qt SDK from http://qt.nokia.com/products/qt-sdk/
+
+2. Set up a custom MADDE target for compiling Qt 5
+
+    $ git clone git@github.com:resworb/scripts.git
+    $ scripts/setup-madde-toolchain.sh
+
+3. Source the script to set up a cross-compile environment
+
+    $ source scripts/setup-madde-toolchain.sh
+
 Scratchbox Instructions
 -----------------------
 
