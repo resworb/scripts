@@ -48,8 +48,11 @@ EOF
     # Make symlinks in the toolchain to match what the Qt mkspecs expect
     # We can't symlink to the binaries that are already there, as some of
     # them are wrappers around gcc for translating sysroots automatically.
+    # We also have to remove the existing binaries so that they won't
+    # conflict with the system when we put the toolchain in the path.
     for binary in $(find . -maxdepth 1 -perm +111 -type f); do
         binary=$(basename $binary)
+        rm $binary
         ln -s $toolchain_bin/$DEB_BUILD_GNU_CPU-none-$DEB_BUILD_GNU_SYSTEM-$binary $DEB_BUILD_GNU_TYPE-$binary
     done
     cd $old_cwd
