@@ -18,6 +18,21 @@ is_sbox() {
     return 0
 }
 
+is_macos() {
+    if [ "$(uname)" == "Darwin" ]; then
+        return 1
+    fi
+
+    return 0
+}
+
+if [ is_macos ]; then
+    readlink() {
+        # Assume GNU tools are installed
+        greadlink $*
+    }
+fi
+
 script_file=`readlink -f $0`
 script_dir=`dirname $script_file`
 
