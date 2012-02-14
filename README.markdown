@@ -8,12 +8,12 @@ Cross-compile Instructions
 
 2. Set up a custom MADDE target for compiling Qt 5
 
-    $ git clone git@github.com:resworb/scripts.git
-    $ scripts/setup-madde-toolchain.sh
+        $ git clone git@github.com:resworb/scripts.git
+        $ scripts/setup-madde-toolchain.sh
 
 3. Source the script to set up a cross-compile environment
 
-    $ source scripts/setup-madde-toolchain.sh
+        $ source scripts/setup-madde-toolchain.sh
 
 Scratchbox Instructions
 -----------------------
@@ -39,8 +39,8 @@ Sync `resolv.conf` and `host.conf` for network access in Scratchbox:
 
 2. Do the following to prepare your environment
 
-    $ mkdir /scratchbox/users/$USER/home/$USER/swork
-    $ ln -s /scratchbox/users/$USER/home/$USER/swork ~/swork
+        $ mkdir /scratchbox/users/$USER/home/$USER/swork
+        $ ln -s /scratchbox/users/$USER/home/$USER/swork ~/swork
 
 NB: You don't need the explicit swork directory as long as the script directory resides on the same level as the source directories.
 
