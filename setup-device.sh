@@ -67,7 +67,7 @@ apt-get update
 
 apt-get -qq --force-yes install wget libxcb-image0 libxcb-keysyms1 libxcb-icccm1 libxcb-aux0 libxcb-event1 libxcb-property1 libxcb-atom1
 
-if cat /var/cache/sysinfod/values | grep /device/sw-release-ver | grep -q "2011.40-4"; then
+if cat /var/cache/sysinfod/values | grep /device/sw-release-ver | grep -q "20.2011.40-4"; then
 	apt-get -qq --force-yes install sshfs
 
 	echo "Setting up SSHFS..."
@@ -88,7 +88,7 @@ if cat /var/cache/sysinfod/values | grep /device/sw-release-ver | grep -q "2011.
 
 	/home/developer/bin/$mount_script
 else
-	echo "Firmware 2011.40-4 required for SSHFS. Skipping."
+	echo "Firmware PR1.1 (20.2011.40-4) required for SSHFS. Skipping."
 fi
 
 EOF
