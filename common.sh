@@ -19,14 +19,11 @@ is_sbox() {
 }
 
 is_macos() {
-    if [ "$(uname)" == "Darwin" ]; then
-        return 1
-    fi
-
-    return 0
+    test "$(uname)" == "Darwin"
+    return $?
 }
 
-if [ is_macos ]; then
+if is_macos; then
     readlink() {
         # Assume GNU tools are installed
         greadlink $*
