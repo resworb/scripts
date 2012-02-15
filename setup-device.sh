@@ -64,23 +64,30 @@ EOL
 
 apt-get update
 
-apt-get -qq --force-yes install wget sshfs libxcb-image0 libxcb-keysyms1 libxcb-icccm1 libxcb-aux0 libxcb-event1 libxcb-property1 libxcb-atom1
+apt-get -qq --force-yes install wget libxcb-image0 libxcb-keysyms1 libxcb-icccm1 libxcb-aux0 libxcb-event1 libxcb-property1 libxcb-atom1
 
-# FIXME: Check if we have open mode or aegis-su
+if cat /var/cache/sysinfod/values | grep /device/sw-release-ver | grep -q "2011.40-4"; then
+	apt-get -qq --force-yes install sshfs
 
-mkdir -p ~/.ssh
-if ! grep -q "Host host" ~/.ssh/config; then
-	echo "Adding host to SSH config..."
-	printf "\nHost host\n    Hostname 192.168.2.14\n    User $USER\n    StrictHostKeyChecking no\n    UserKnownHostsFile /dev/null\n    ServerAliveInterval 120" >> ~/.ssh/config
+	# FIXME: Check if we have open mode or aegis-su
+
+	mkdir -p ~/.ssh
+	if ! grep -q "Host host" ~/.ssh/config; then
+		echo "Adding host to SSH config..."
+		printf "\nHost host\n    Hostname 192.168.2.14\n    User $USER\n    StrictHostKeyChecking no\n    UserKnownHostsFile /dev/null\n    ServerAliveInterval 120" >> ~/.ssh/config
+	fi
+
+	profile="/home/developer/.profile"
+	if ! grep -q "$mount_script" \$profile > /dev/null 2>&1; then
+		 echo "/home/developer/bin/$mount_script" >> \$profile
+		 chown user:developer \$profile
+	fi
+
+	/home/developer/bin/$mount_script
+else
+	echo "Firmware 2011.40-4 required for SSHFS. Skipping."
 fi
 
-profile="/home/developer/.profile"
-if ! grep -q "$mount_script" \$profile > /dev/null 2>&1; then
-	 echo "/home/developer/bin/$mount_script" >> \$profile
-	 chown user:developer \$profile
-fi
-
-/home/developer/bin/$mount_script
 EOF
 
 chmod 755 $device_script
