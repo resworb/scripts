@@ -45,11 +45,14 @@ fi
 gconftool --set /system/osso/dsm/display/display_brightness --type=int 5
 #gconftool --set /system/osso/dsm/display/inhibit_blank_mode --type=int 1
 
-while [ $(ping -c 1 google.com > /dev/null 2>&1; echo $?) != 0 ]; do
+if ! nslookup google.com 8.8.8.8 > /dev/null 2>&1; then
+	echo "Please ensure that the device is connected to the Internet."
 	dbus-send --system --type=method_call --dest=com.nokia.icd_ui /com/nokia/icd_ui com.nokia.icd_ui.show_conn_dlg boolean:false
-	echo "Please ensure that the device is connected to the Internet. Then press [enter]"
-	read dummy
-done
+	while [ \$(nslookup google.com 8.8.8.8 > /dev/null 2>&1; echo \$?) != 0 ]; do
+		echo "Waiting..."
+		sleep 1
+	done
+fi
 
 echo "Installing packages..."
 
