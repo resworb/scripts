@@ -120,6 +120,6 @@ EOF
 chmod 755 /tmp/$mount_script
 scp -q /tmp/$mount_script device:~/bin/$mount_script
 
-ssh -q -t -t device "$device_script"
+ssh -q -t -t developer@device "$device_script"
 
 echo "Success! The device has now been set up for Qt5 development"
