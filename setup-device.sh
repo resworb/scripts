@@ -77,7 +77,7 @@ if cat /var/cache/sysinfod/values | grep /device/sw-release-ver | grep -q "20.20
 	mkdir -p ~/.ssh
 	if ! grep -q "Host host" ~/.ssh/config; then
 		echo "Adding host to SSH config..."
-		printf "\nHost host\n    Hostname 192.168.2.14\n    User $USER\n    StrictHostKeyChecking no\n    UserKnownHostsFile /dev/null\n    ServerAliveInterval 120" >> ~/.ssh/config
+		printf "\nHost host\n    Hostname 192.168.2.14\n    StrictHostKeyChecking no\n    UserKnownHostsFile /dev/null\n    ServerAliveInterval 120" >> ~/.ssh/config
 	fi
 
 	profile="/home/developer/.profile"
@@ -109,10 +109,11 @@ fi
 
 if ! mount | grep -q /mnt/host ; then
 	echo "Mounting host via SSHFS, please enter password for $USER"
-	sshfs host:/ /mnt/host -o allow_other -o cache=no
+	sshfs $USER@host:/ /mnt/host -o allow_other -o cache=no -o uid=29999 -o gid=30027
 	if [ $? -eq 0 ]; then
-		mkdir -p $(dirname $HOME)
-		ln -s /mnt/host/$HOME $HOME
+		mkdir -p $(dirname $HOME) &&
+		ln -f -s /mnt/Host$HOME $HOME &&
+		echo "Your host is now available at /mnt/host and $HOME"
 	fi
 fi
 EOF
