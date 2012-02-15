@@ -65,7 +65,7 @@ EOL
 
 apt-get update
 
-apt-get -qq --force-yes install wget libxcb-image0 libxcb-keysyms1 libxcb-icccm1 libxcb-aux0 libxcb-event1 libxcb-property1 libxcb-atom1
+apt-get -qq --force-yes install wget libxcb-image0 libxcb-keysyms1 libxcb-icccm1 libxcb-aux0 libxcb-event1 libxcb-property1 libxcb-atom1 libxcb-sync0 libxcb-xfixes
 
 if cat /var/cache/sysinfod/values | grep /device/sw-release-ver | grep -q "20.2011.40-4"; then
 	apt-get -qq --force-yes install sshfs
