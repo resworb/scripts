@@ -45,6 +45,7 @@ fi
 gconftool --set /system/osso/dsm/display/display_brightness --type=int 5
 #gconftool --set /system/osso/dsm/display/inhibit_blank_mode --type=int 1
 
+echo "Verifying Internet connectivity..."
 if ! nslookup google.com 8.8.8.8 > /dev/null 2>&1; then
 	echo "Please ensure that the device is connected to the Internet."
 	dbus-send --system --type=method_call --dest=com.nokia.icd_ui /com/nokia/icd_ui com.nokia.icd_ui.show_conn_dlg boolean:false
@@ -68,6 +69,8 @@ apt-get -qq --force-yes install wget libxcb-image0 libxcb-keysyms1 libxcb-icccm1
 
 if cat /var/cache/sysinfod/values | grep /device/sw-release-ver | grep -q "2011.40-4"; then
 	apt-get -qq --force-yes install sshfs
+
+	echo "Setting up SSHFS..."
 
 	# FIXME: Check if we have open mode or aegis-su
 
