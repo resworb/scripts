@@ -73,7 +73,7 @@ fi
 
 profile="/home/developer/.profile"
 if ! grep -q "$mount_script" \$profile > /dev/null 2>&1; then
-	 echo "/home/developer/bin/$mount_script" > \$profile
+	 echo "/home/developer/bin/$mount_script" >> \$profile
 	 chown user:developer \$profile
 fi
 
