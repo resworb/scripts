@@ -79,6 +79,7 @@ webkit="qtwebkit-webkit2-dev"
 release=
 valgrind=
 clean=
+use_ssh=--ssh
 while [ $# -gt 0 ]; do
     case $1 in
         --release)
@@ -117,6 +118,10 @@ while [ $# -gt 0 ]; do
             clean=1
             shift
             ;;
+	--no-ssh)
+	    use_ssh=
+	    shift
+	    ;;
         *)
             die "unknown flag $1"
             break

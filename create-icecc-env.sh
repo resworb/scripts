@@ -9,7 +9,7 @@ while [ $# != 0 ] ; do
                 icecc_environment=$2
                 shift
             else
-                echo "Please pass --environment [host | scratchbox]"
+                echo "Please pass --environment [host | scratchbox | cross]"
                 exit 1
             fi
             ;;
@@ -121,7 +121,7 @@ elif [ "x$icecc_environment" = "xscratchbox" ] ; then
         echo $workdir
         wget http://ftp.suse.com/pub/projects/icecream/icecc-0.9.7.tar.bz2 -O $workdir/icecc.tar.bz2
         tar xvjpf $workdir/icecc.tar.bz2 -C $workdir/
-        echo "cd /home/$USER/icecc/$(basename $workdir)/icecc-* && ./configure CC=host-gcc CXX=host-g++ && make -j2" | $sbdir/login -s
+        echo "cd /home/$USER/icecc/$(basename $workdir)/icecc-* && ./configure CC=gcc CXX=g++ && make -j2" | $sbdir/login -s
         echo "Done building... Need to install the binaries..."
         sudo cp $workdir/icecc-*/client/icecc $sbdir/tools/bin/icecc
         sudo ln -s icecc $sbdir/tools/bin/icecc++
