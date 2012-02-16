@@ -86,7 +86,9 @@ if cat /var/cache/sysinfod/values | grep /device/sw-release-ver | grep -q "20.20
 		 chown user:developer \$profile
 	fi
 
-	/home/developer/bin/$mount_script
+	# FIXME: For some reason this does not work (does not mount), without -o reconnect
+	# and appears to mount but fails with "Input/output error" with -o reconnect.
+	# /home/developer/bin/$mount_script
 else
 	echo "Firmware PR1.1 (20.2011.40-4) required for SSHFS. Skipping."
 fi
@@ -109,7 +111,7 @@ fi
 
 if ! mount | grep -q /mnt/host ; then
 	echo "Mounting host via SSHFS, please enter password for $USER"
-	sshfs $USER@host:/ /mnt/host -o allow_other -o cache=no -o uid=29999 -o gid=30027
+	sshfs $USER@host:/ /mnt/host -o allow_other -o cache=no -o uid=29999 -o gid=30027 -o reconnect
 	if [ $? -eq 0 ]; then
 		mkdir -p $(dirname $HOME) &&
 		ln -f -s /mnt/Host$HOME $HOME &&
