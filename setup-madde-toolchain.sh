@@ -102,7 +102,7 @@ if [ ! -d "$($mad_admin -t $harmattan_base_target query target-dir 2>&1)" ]; the
     test $sourced && return || exit 1
 fi
 
-echo "Found base harmattan target '$harmattan_base_target'"
+test $sourced || echo "Found base harmattan target '$harmattan_base_target'"
 
 custom_target_name="${harmattan_base_target}_${custom_postfix}"
 mad_target_admin="$mad_admin -t $custom_target_name"
@@ -125,7 +125,12 @@ if [ $sourced ]; then
     export PKG_CONFIG_SYSROOT_DIR=$SYSROOT_DIR
     export PKG_CONFIG_LIBDIR=$SYSROOT_DIR/usr/lib/pkgconfig
 
-    echo "Environment set up to use $custom_target_name"
+    envs=(PATH SYSROOT_DIR PKG_CONFIG_PATH PKG_CONFIG_SYSROOT_DIR PKG_CONFIG_LIBDIR)
+    echo "Environment set up to use $custom_target_name:\n"
+    for variable in "${envs[@]}"; do
+        echo "    $variable=$(eval echo \$$variable)"
+    done
+    echo
     return
 fi
 
