@@ -69,6 +69,19 @@ else
         echo
         exit 1
     }
+
+    while [ $# != 0 ]; do
+    case "$1" in
+        --force)
+            force=1
+            ;;
+        *)
+            echo "Unknown flag '$1'"
+            exit 1
+            ;;
+    esac
+    shift
+done
 fi
 
 possible_madde_paths=(
@@ -146,7 +159,7 @@ cat $script_root/packages | while read package_spec; do
     package_filename="$(echo $package_spec | cut -d : -f 2).deb"
     package_name=$(echo $package_filename | cut -d _ -f 1)
     $mad_target_admin xdpkg -p $package_name 2>/dev/null >/dev/null
-    if [ $? == 0 ]; then
+    if [ $? == 0 -a -z "$force" ]; then
         continue
     fi
 
