@@ -67,7 +67,12 @@ apt-get update
 
 apt-get -qq --force-yes install wget libxcb-image0 libxcb-keysyms1 libxcb-icccm1 libxcb-aux0 libxcb-event1 libxcb-property1 libxcb-atom1 libxcb-sync0 libxcb-xfixes0
 
-if cat /var/cache/sysinfod/values | grep /device/sw-release-ver | grep -q "20.2011.40-4"; then
+# Verify that we're allowed to mount (open-mode or device has R&D certificates)
+mkdir -p /tmp/mnt-src /tmp/mnt-dst
+mount -o bind /tmp/mnt-src /tmp/mnt-dst > /dev/null 2>&1
+allowed_to_mount=\$(test \$? == 0 && echo "yes")
+
+if test \$allowed_to_mount && cat /var/cache/sysinfod/values | grep /device/sw-release-ver | grep -q "20.2011.40-4"; then
 	apt-get -qq --force-yes install sshfs
 
 	echo "Setting up SSHFS..."
@@ -90,7 +95,7 @@ if cat /var/cache/sysinfod/values | grep /device/sw-release-ver | grep -q "20.20
 	# and appears to mount but fails with "Input/output error" with -o reconnect.
 	# /home/developer/bin/$mount_script
 else
-	echo "Firmware PR1.1 (20.2011.40-4) required for SSHFS. Skipping."
+	echo "Firmware PR1.1 (20.2011.40-4) on an openmode patched kernel required for SSHFS. Skipping."
 fi
 
 EOF
