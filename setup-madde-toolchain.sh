@@ -70,18 +70,28 @@ else
     }
 fi
 
-# Assume it's in the default QtSDK path
-mad_admin=$HOME/QtSDK/Madde/bin/mad-admin
-if [ ! -e $mad_admin ]; then
-    # Try to look for it in the path. This might pick up a system-MADDE
-    mad_admin=$(command -v mad-admin)
-    if [ $? != 0 ]; then
-        cat <<EOF
+possible_madde_paths=(
+    "$HOME/QtSDK/Madde/bin"
+    "$HOME/Applications/QtSDK/Madde/bin"
+    "$QTSDK/Madde/bin"
+    "$(dirname $(command -v mad-admin || echo \"\"))"
+)
+
+for possible_path in "${possible_madde_paths[@]}"; do
+    if [ -e "$possible_path/mad-admin" ]; then
+        mad_admin="$possible_path/mad-admin"
+        break
+    fi
+done
+
+if [ -z "$mad_admin" ]; then
+    cat <<EOF
 Could not find MADDE. Please make sure the MADDE tools such as 'mad' and 'mad-admin' are in
 your PATH. If you've installed the Qt SDK you'll find these tools in \$QTSDK/Madde/bin.
 EOF
-        test $sourced && return || exit 1
-    fi
+    test $sourced && return || exit 1
+else
+    test $sourced || echo "Using MADDE from $(dirname $mad_admin)"
 fi
 
 mad_install_dir=$($mad_admin query install-dir)
