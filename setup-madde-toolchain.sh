@@ -61,6 +61,7 @@ EOF
 if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
     sourced=1
 else
+    unset sourced
     trap cleanup 2
 
     cleanup() 
