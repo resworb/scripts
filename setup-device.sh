@@ -111,6 +111,7 @@ fi
 
 if ! mount | grep -q /mnt/host ; then
 	echo "Mounting host via SSHFS, please enter password for $USER"
+	mkdir -p /mnt/host
 	sshfs $USER@host:/ /mnt/host -o allow_other -o cache=no -o uid=29999 -o gid=30027 -o reconnect
 	if [ $? -eq 0 ]; then
 		mkdir -p $(dirname $HOME) &&
