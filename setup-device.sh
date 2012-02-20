@@ -75,15 +75,15 @@ if cat /var/cache/sysinfod/values | grep /device/sw-release-ver | grep -q "20.20
 	# FIXME: Check if we have open mode or aegis-su
 
 	mkdir -p ~/.ssh
-	if ! grep -q "Host host" ~/.ssh/config; then
+	if ! grep -q "Host host" ~/.ssh/config > /dev/null 2>&1; then
 		echo "Adding host to SSH config..."
 		printf "\nHost host\n    Hostname 192.168.2.14\n    StrictHostKeyChecking no\n    UserKnownHostsFile /dev/null\n    ServerAliveInterval 120" >> ~/.ssh/config
 	fi
 
 	profile="/home/developer/.profile"
 	if ! grep -q "$mount_script" \$profile > /dev/null 2>&1; then
-		 echo "/home/developer/bin/$mount_script" >> \$profile
-		 chown user:developer \$profile
+		 devel-su developer -c "echo \"/home/developer/bin/$mount_script\" >> \$profile"
+		 devel-su developer -c "chown user:developer \$profile"
 	fi
 
 	# FIXME: For some reason this does not work (does not mount), without -o reconnect
