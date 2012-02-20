@@ -114,7 +114,7 @@ if ! mount | grep -q /mnt/host ; then
 	sshfs $USER@host:/ /mnt/host -o allow_other -o cache=no -o uid=29999 -o gid=30027 -o reconnect
 	if [ $? -eq 0 ]; then
 		mkdir -p $(dirname $HOME) &&
-		ln -f -s /mnt/Host$HOME $HOME &&
+		ln -f -s /mnt/host$HOME $HOME &&
 		echo "Your host is now available at /mnt/host and $HOME"
 	fi
 fi
