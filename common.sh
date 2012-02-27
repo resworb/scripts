@@ -80,6 +80,7 @@ release=
 valgrind=
 clean=
 use_ssh=--ssh
+with_icecc=
 while [ $# -gt 0 ]; do
     case $1 in
         --release)
@@ -104,7 +105,10 @@ while [ $# -gt 0 ]; do
             device_target=xarmel
             shift
             ;;
-
+        --with-icecc)
+            with_icecc=true
+            shift
+            ;;
         --webkit_debug)
             webkit_buildmode=--debug
 	    webkit_buildmodedir=Debug
@@ -128,6 +132,11 @@ while [ $# -gt 0 ]; do
             ;;
     esac
 done
+
+if [ -n "$with_icecc" -a $device_target=="xarmel" -a -x $script_dir/../setup-icecc-cross-env.sh ]; then
+    . $script_dir/../setup-icecc-cross-env.sh
+fi
+
 
 is_release() {
     if [ -z "$release" ]; then
