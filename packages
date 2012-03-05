@@ -24,6 +24,8 @@ xcb-util:libxcb-keysyms1-dev_0.3.6-2+0m6_armel
 xcb-util:libxcb-keysyms1_0.3.6-2+0m6_armel
 xcb-util:libxcb-property1-dev_0.3.6-2+0m6_armel
 xcb-util:libxcb-property1_0.3.6-2+0m6_armel
+xcb-util:libxcb-render-util0_0.3.6-2+0m6_armel
+xcb-util:libxcb-render-util0-dev_0.3.6-2+0m6_armel
 libxcb:libxcb-render0-dev_1.7-1-meego1082+0m6_armel
 libxcb:libxcb-shape0-dev_1.7-1-meego1082+0m6_armel
 libxcb:libxcb-shm0-dev_1.7-1-meego1082+0m6_armel
