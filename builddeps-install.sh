@@ -27,7 +27,7 @@ libxcb-damage0 \
 libxcb-damage0-dev
 "
 
-deps_install_host="$deps_install_shared libxcb-icccm4 libxcb-icccm4-dev"
+deps_install_host="$deps_install_shared libxcb-icccm4 libxcb-icccm4-dev bison gperf"
 
 deps_install_m=$deps_install_shared;
 
