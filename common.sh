@@ -24,6 +24,12 @@ is_macos() {
 }
 
 if is_macos; then
+    type greadlink >/dev/null 2>&1 || {
+        echo >&2 "greadlink is not installed.  Aborting."
+        echo >&2 "  greadlink can for example be installed using homebrew."
+        echo >&2 "  use: brew install coreutils";
+        exit 1;
+    }
     readlink() {
         # Assume GNU tools are installed
         greadlink $*
