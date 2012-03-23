@@ -87,6 +87,7 @@ fi
 possible_madde_paths=(
     "$HOME/QtSDK/Madde/bin"
     "$HOME/Applications/QtSDK/Madde/bin"
+    "/Applications/QtSDK/Madde/bin"
     "$QTSDK/Madde/bin"
     "$(dirname $(command -v mad-admin || echo \"\"))"
 )
