@@ -6,7 +6,7 @@ script_root=$(dirname $0)
 # At that point we'll have to deduct the content of the config file
 # based on the chosen base target, rather than hard-coding it. This
 # can be done using the targets 'information' file if needed.
-harmattan_base_target="harmattan_10.2011.34-1"
+harmattan_base_target="harmattan_10.2011.34-1_rt1.2"
 
 custom_postfix="qt5"
 
