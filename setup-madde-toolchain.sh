@@ -10,7 +10,7 @@ harmattan_base_target="harmattan_10.2011.34-1_rt1.2"
 
 custom_postfix="qt5"
 
-repo_base_url="http://harmattan-dev.nokia.com/pool/harmattan-beta3/free"
+repo_base_url="http://harmattan-dev.nokia.com/pool/harmattan/free"
 
 # -------------------------------------------------------------------
 
