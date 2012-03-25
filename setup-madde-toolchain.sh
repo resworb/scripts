@@ -75,6 +75,9 @@ else
         --force)
             force=1
             ;;
+        --full)
+            full=1
+            ;;
         *)
             echo "Unknown flag '$1'"
             exit 1
@@ -83,6 +86,58 @@ else
     shift
 done
 fi
+
+in_array() {
+    local hay needle=$1
+    shift
+    for hay; do
+        [[ $hay == $needle ]] && return 0
+    done
+    return 1
+}
+
+install_packages()
+{
+    package_list=($1)
+    package_repo=$2
+    distribution=$3
+
+    arch="binary-armel"
+
+    echo "Fetching packages from $package_repo ($distribution)..."
+
+    install_next=0
+
+    OLD_IFS=$IFS
+    IFS=$'\n'
+    for line in $(curl -s $package_repo/dists/$distribution/$arch/Packages); do
+        if [[ $line =~ ^Package:.* ]]; then
+            package=${line#Package: }
+            in_array $package "${package_list[@]}" && {
+                $mad_admin -t $custom_target_name xdpkg -p $package 2>/dev/null >/dev/null
+                if [ $? != 0 -o -n "$force" ]; then
+                    install_next=1
+                fi
+            }
+        elif [[ $line =~ ^Filename:.* ]]; then
+            if [ $install_next == 1 ]; then
+                filename=${line#Filename: }
+                url=$package_repo/$filename
+                echo "Downloading $url..."
+                local_file=/tmp/missing_package.deb
+                wget -q -O $local_file $url
+                if [ $? != 0 ]; then
+                    echo "Failed to download $url!"
+                    exit 1
+                fi
+                $mad_admin -t $custom_target_name xdpkg -i $local_file
+                rm -f $local_file
+            fi
+            install_next=0
+        fi
+    done
+    IFS=$OLD_IFS
+}
 
 possible_madde_paths=(
     "$HOME/QtSDK/Madde/bin"
@@ -151,46 +206,107 @@ fi
 
 echo "Installing packages..."
 
-cat $script_root/packages | while read package_spec; do
-    if [ -z "$package_spec" -o "${package_spec:0:1}" == "#" ]; then
-        continue
-    fi
+# These pacakges are required for building Qt5
 
-    package_base=$(echo $package_spec | cut -d : -f 1)
-    package_filename="$(echo $package_spec | cut -d : -f 2).deb"
-    package_name=$(echo $package_filename | cut -d _ -f 1)
-    $mad_target_admin xdpkg -p $package_name 2>/dev/null >/dev/null
-    if [ $? == 0 -a -z "$force" ]; then
-        continue
-    fi
+base_packages="""
+    libfontconfig1-dev
+    libfreetype6-dev
+    libncurses5-dev
+    libpng12-dev
+    libreadline5-dev
+    libtiff4-dev
+    libtiffxx0c2
+    libx11-xcb-dev
+    libxcb-atom1
+    libxcb-atom1-dev
+    libxcb-aux0
+    libxcb-damage0-dev
+    libxcb-damage0
+    libxcb-event1-dev
+    libxcb-event1
+    libxcb-icccm1-dev
+    libxcb-icccm1
+    libxcb-image0-dev
+    libxcb-image0
+    libxcb-keysyms1-dev
+    libxcb-keysyms1
+    libxcb-property1-dev
+    libxcb-property1
+    libxcb-render-util0
+    libxcb-render-util0-dev
+    libxcb-render0-dev
+    libxcb-shape0-dev
+    libxcb-shm0-dev
+    libxcb-shm0
+    libxcb-sync0-dev
+    libxcb-sync0
+    libxcb-xfixes0-dev
+    libxcb-xfixes0
+    libxdmcp-dev
+    libxdmcp6
+    libxft-dev
+    libxi-dev
+    libxmu-dev
+    libxmu-headers
+    libxmu6
+    libxrandr-dev
+    libxslt1-dev
+    meego-gstreamer0.10-interfaces-dev
+"""
 
-    case $package_base in
-        lib*)
-            prefix=$(echo $package_base | cut -c 1-4)
-            ;;
-        *)
-            prefix=$(echo $package_base | cut -c 1)
-            ;;
-    esac
+install_packages "$base_packages" "http://harmattan-dev.nokia.com" "harmattan/sdk/free"
 
-    url="$repo_base_url/$prefix/$package_base/$package_filename"
-    local_file=/tmp/missing_package.deb
-    wget -q -O $local_file $url
-    if [ $? != 0 ]; then
-        echo "Failed to download $url!"
-        exit 1
-    fi
-    $mad_target_admin xdpkg -i $local_file
-    rm -f $local_file
-done
+target_dir=$($mad_target_admin query target-dir)
+sysroot_dir=$($mad_target_admin query sysroot-dir)
 
-# Check the while loops exit code
+prefix="/opt/qt5"
+
+if [ -n "$full" ]; then
+    # Install binary packages for Qt5, Components, and WebKit
+    extra_pacakges="""
+        qt5-base
+        qt5-declarative
+        qt5-jsbackend
+        qt5-location
+        qt5-jsondb
+        qt5-q3d
+        qt5-quick1
+        qt5-script
+        qt5-sensors
+        qt5-xmlpatterns
+        qt-components2
+        webkit-snapshot
+"""
+
+    install_packages "$extra_pacakges" "http://qtlabs.org.br/~lmoura/qt5" "unstable/main"
+
+    target_dir=$($mad_target_admin query target-dir)
+    old_cwd=$(pwd)
+    cd $target_dir/bin
+
+    for binary in $(find $sysroot_dir$prefix/bin -maxdepth 1 -perm +111 -type f); do
+        ln -sf $binary $(basename $binary)
+    done
+    cd $old_cwd
+
+    mkspecs_dir="$sysroot_dir$prefix/mkspecs"
+
+    cat >> $mkspecs_dir/qconfig.pri <<EOF
+
+QMAKE_CFLAGS    *= --sysroot=\$\$[QT_SYSROOT]
+QMAKE_CXXFLAGS  *= --sysroot=\$\$[QT_SYSROOT]
+QMAKE_LFLAGS    *= --sysroot=\$\$[QT_SYSROOT]
+
+EOF
+
+    # Set a default mkspec
+    ln -sf $mkspecs_dir/linux-arm-gnueabi-g++ $mkspecs_dir/default
+fi
+
 if [ $? != 0 ]; then
     exit 1
 fi
 
-target_dir=$($mad_target_admin query target-dir)
-sysroot_dir=$($mad_target_admin query sysroot-dir)
 
 cat <<EOF
 
@@ -206,3 +322,17 @@ You may source this script to set environment variables accordingly.
 
 EOF
 
+if [ -n "$full" ]; then
+
+    cat <<EOF
+You've also installed pre-built binary packages of Qt5, QtComponents, and WebKit. If you
+are cross-compiling on OS X you need to build the base tools for your host system:
+
+    configure \$OPTIONS -prefix $prefix -hostprefix \$SYSROOT_DIR$prefix
+
+And then:
+
+    cd qtbase && make install_qmake && cd src/tools && make && make install
+
+EOF
+fi
