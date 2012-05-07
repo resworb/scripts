@@ -26,7 +26,7 @@ export WEBKITOUTPUTDIR=$PWD/$webkit-builddir-$build_suffix
 
 $webkit_dir/Tools/Scripts/build-webkit --qt $webkit_buildmode \
     --makeargs="${makeargs}" \
-    --no-3d-canvas \
+    --no-webgl \
     $qmake_valgrind \
     ${QMAKEARGS} 
 
