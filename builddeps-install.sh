@@ -24,7 +24,8 @@ libxcb-sync0 \
 libxcb-sync0-dev \
 libxcb-xfixes0-dev \
 libxcb-damage0 \
-libxcb-damage0-dev
+libxcb-damage0-dev \
+libxcb-randr0-dev
 "
 
 deps_install_host="$deps_install_shared libxcb-icccm4 libxcb-icccm4-dev bison gperf"
