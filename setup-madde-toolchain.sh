@@ -242,6 +242,7 @@ base_packages="""
     libxcb-sync0
     libxcb-xfixes0-dev
     libxcb-xfixes0
+    libxcb-randr0-dev
     libxdmcp-dev
     libxdmcp6
     libxft-dev
