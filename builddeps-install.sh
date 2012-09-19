@@ -10,6 +10,7 @@ echo "Installing deps..."
 $sudo apt-get -y --force-yes build-dep qt4-x11
 
 deps_install_shared="\
+libicu-dev \
 libxcb1 \
 libxcb1-dev \
 libx11-xcb1 \
