@@ -85,7 +85,6 @@ webkit="qtwebkit-webkit2-dev"
 release=
 valgrind=
 clean=
-use_ssh=--ssh
 with_icecc=
 while [ $# -gt 0 ]; do
     case $1 in
@@ -128,10 +127,6 @@ while [ $# -gt 0 ]; do
             clean=1
             shift
             ;;
-	--no-ssh)
-	    use_ssh=
-	    shift
-	    ;;
         *)
             die "unknown flag $1"
             break
